@@ -68,6 +68,8 @@ namespace gitlab_ci_runner.helper
         public static BuildInfo getBuild()
         {
             Console.WriteLine("* Checking for builds...");
+            JsConfig.EmitLowercaseUnderscoreNames = true;
+            JsConfig.PropertyConvention = PropertyConvention.Lenient;
 			var client = new JsonServiceClient (apiurl);
 			try
 			{
@@ -78,7 +80,7 @@ namespace gitlab_ci_runner.helper
 
 				if (buildInfo != null)
 				{
-					return buildInfo;                  
+					return buildInfo;
 				}			
 			}
 			catch (WebServiceException ex)

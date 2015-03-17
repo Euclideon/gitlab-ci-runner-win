@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ServiceStack;
-
+using System.Runtime.Serialization;
 
 /// <summary>
 /// V1 API
@@ -78,61 +78,73 @@ namespace gitlab_ci_runner.api
 		}
 	}
 
+  [DataContract]
 	public class BuildInfo
-	{
+  {
+    [DataMember]
 		public int id
 		{
 			get;
 			set;
 		}
 
+    [DataMember]
 		public int project_id
 		{
 			get;
 			set;
 		}
 
+    [DataMember]
 		public string project_name
 		{
 			get;
 			set;
 		}
 
+    [DataMember]
 		public string commands
 		{
 			get;
 			set;
 		}
 
+    [DataMember]
 		public string repo_url
 		{
 			get;
 			set;
 		}
 
+    [DataMember]
 		public string sha
 		{
 			get;
 			set;
 		}
 
+    [DataMember]
 		public string before_sha
 		{
 			get;
 			set;
 		}
 
+    [DataMember(Name="ref")]
 		public string ref_name
 		{
 			get;
 			set;
 		}
+
+    [DataMember]
 		public int timeout
 		{
 			get;
 			set;
 		}
 
+    [DataMember]
 		public bool allow_git_fetch
 		{
 			get;

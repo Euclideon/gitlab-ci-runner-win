@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Text;
 using gitlab_ci_runner.api;
 using Microsoft.Experimental.IO;
+using gitlab_ci_runner.helper;
 
 namespace gitlab_ci_runner.runner
 {
@@ -95,41 +96,40 @@ namespace gitlab_ci_runner.runner
         public void run()
         {
             state = State.RUNNING;
-            
+
             try {
 
                 // Initialize project dir
                 initProjectDir();
-    
+
                 // Add build commands
                 foreach (string sCommand in buildInfo.GetCommands ())
                 {
                     commands.AddLast(sCommand);
                 }
-    
+
+				string batchFile = sProjectsDir + "\\build-" + buildInfo.project_id + ".bat";
+				File.WriteAllLines(batchFile, commands);
+
                 // Execute
-                foreach (string sCommand in commands)
+				if (!exec(batchFile))
                 {
-                    if (!exec(sCommand))
-                    {
-                        state = State.FAILED;
-                        break;
-                    }
+                    state = State.FAILED;
                 }
-    
+
                 if (state == State.RUNNING)
                 {
                     state = State.SUCCESS;
                 }
-                
+
             } catch (Exception rex) {
                 outputList.Enqueue("");
                 outputList.Enqueue("A runner exception occoured: " + rex.Message);
                 outputList.Enqueue("");
                 state = State.FAILED;
             }
-            
-            
+
+
             completed = true;
         }
 
@@ -160,25 +160,17 @@ namespace gitlab_ci_runner.runner
 
                 commands.AddLast(cloneCmd());
                 commands.AddLast(checkoutCmd());
-            }
+			}
         }
 
         /// <summary>
         /// Execute a command
         /// </summary>
-        /// <param name="sCommand">Command to execute</param>
-        private bool exec(string sCommand)
+		/// <param name="batchFile">Batch file to execute</param>
+        private bool exec(string batchFile)
         {
             try
             {
-                // Remove Whitespaces
-                sCommand = sCommand.Trim();
-
-                // Output command
-                outputList.Enqueue("");
-                outputList.Enqueue(sCommand);
-                outputList.Enqueue("");
-
                 // Build process
                 Process p = new Process();
                 p.StartInfo.UseShellExecute = false;
@@ -186,8 +178,7 @@ namespace gitlab_ci_runner.runner
                 {
                     p.StartInfo.WorkingDirectory = sProjectDir; // Set Current Working Directory to project directory
                 }
-                p.StartInfo.FileName = "cmd.exe"; // use cmd.exe so we dont have to split our command in file name and arguments
-                p.StartInfo.Arguments = "/C \"" + sCommand + "\""; // pass full command as arguments
+				p.StartInfo.FileName = batchFile;
 
                 // Environment variables
                 p.StartInfo.EnvironmentVariables["HOME"] = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile); // Fix for missing SSH Key
@@ -204,6 +195,21 @@ namespace gitlab_ci_runner.runner
                 p.StartInfo.EnvironmentVariables["CI_BUILD_REF"] = buildInfo.sha;
                 p.StartInfo.EnvironmentVariables["CI_BUILD_REF_NAME"] = buildInfo.ref_name;
                 p.StartInfo.EnvironmentVariables["CI_BUILD_ID"] = buildInfo.id.ToString();
+
+				if (Registry.HKCR_PathExists(@"VisualStudio.DTE.8.0"))
+					p.StartInfo.EnvironmentVariables["MSBUILD_2005"] = Registry.HKLM_GetString(@"Software\Microsoft\MSBuild\ToolsVersions\4.0", "MSBuildToolsPath") + @"\msbuild.exe /pVisualStudioVersion:8.0 /p:PlatformToolset=v80";
+
+				if (Registry.HKCR_PathExists(@"VisualStudio.DTE.9.0"))
+					p.StartInfo.EnvironmentVariables["MSBUILD_2008"] = Registry.HKLM_GetString(@"Software\Microsoft\MSBuild\ToolsVersions\4.0", "MSBuildToolsPath") + @"\msbuild.exe /pVisualStudioVersion:9.0 /p:PlatformToolset=v90";
+
+				if (Registry.HKCR_PathExists(@"VisualStudio.DTE.10.0"))
+					p.StartInfo.EnvironmentVariables["MSBUILD_2010"] = Registry.HKLM_GetString(@"Software\Microsoft\MSBuild\ToolsVersions\4.0", "MSBuildToolsPath") + @"\msbuild.exe /pVisualStudioVersion:10.0 /p:PlatformToolset=v100";
+
+				if (Registry.HKCR_PathExists(@"VisualStudio.DTE.11.0"))
+					p.StartInfo.EnvironmentVariables["MSBUILD_2012"] = Registry.HKLM_GetString(@"Software\Microsoft\MSBuild\ToolsVersions\4.0", "MSBuildToolsPath") + @"\msbuild.exe /pVisualStudioVersion:11.0 /p:PlatformToolset=v110";
+
+				if (Registry.HKCR_PathExists(@"VisualStudio.DTE.12.0"))
+					p.StartInfo.EnvironmentVariables["MSBUILD_2013"] = Registry.HKLM_GetString(@"Software\Microsoft\MSBuild\ToolsVersions\12.0","MSBuildToolsPath") + @"\msbuild.exe";
 
                 // Redirect Standard Output and Standard Error
                 p.StartInfo.RedirectStandardOutput = true;

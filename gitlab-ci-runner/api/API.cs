@@ -24,6 +24,18 @@ namespace gitlab_ci_runner.api
 			get;
 			set;
 		}
+
+		public string tag_list
+		{
+			get;
+			set;
+		}
+
+		public string description
+		{
+			get;
+			set;
+		}
 	}
 
 	[Route ("/builds/register.json", "POST")]
@@ -78,73 +90,73 @@ namespace gitlab_ci_runner.api
 		}
 	}
 
-  [DataContract]
+	[DataContract]
 	public class BuildInfo
-  {
-    [DataMember]
+	{
+		[DataMember]
 		public int id
 		{
 			get;
 			set;
 		}
 
-    [DataMember]
+		[DataMember]
 		public int project_id
 		{
 			get;
 			set;
 		}
 
-    [DataMember]
+		[DataMember]
 		public string project_name
 		{
 			get;
 			set;
 		}
 
-    [DataMember]
+		[DataMember]
 		public string commands
 		{
 			get;
 			set;
 		}
 
-    [DataMember]
+		[DataMember]
 		public string repo_url
 		{
 			get;
 			set;
 		}
 
-    [DataMember]
+		[DataMember]
 		public string sha
 		{
 			get;
 			set;
 		}
 
-    [DataMember]
+		[DataMember]
 		public string before_sha
 		{
 			get;
 			set;
 		}
 
-    [DataMember(Name="ref")]
+		[DataMember(Name = "ref")]
 		public string ref_name
 		{
 			get;
 			set;
 		}
 
-    [DataMember]
+		[DataMember]
 		public int timeout
 		{
 			get;
 			set;
 		}
 
-    [DataMember]
+		[DataMember]
 		public bool allow_git_fetch
 		{
 			get;

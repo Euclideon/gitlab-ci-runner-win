@@ -65,6 +65,7 @@
     <Compile Include="conf\Config.cs" />
     <Compile Include="helper\IniFile.cs" />
     <Compile Include="helper\Network.cs" />
+    <Compile Include="helper\Registry.cs" />
     <Compile Include="helper\SSHKey.cs" />
     <Compile Include="helper\TextFile.cs" />
     <Compile Include="Program.cs" />

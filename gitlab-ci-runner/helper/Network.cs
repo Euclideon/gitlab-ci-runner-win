@@ -33,7 +33,7 @@ namespace gitlab_ci_runner.helper
         /// <param name="sPubKey">SSH Public Key</param>
         /// <param name="sToken">Token</param>
         /// <returns>Token</returns>
-        public static string registerRunner(String sPubKey, String sToken)
+        public static string registerRunner(String sPubKey, String sToken, String sTaglist, String sDescription)
         {
 			var client = new JsonServiceClient (apiurl);
 			try
@@ -41,7 +41,9 @@ namespace gitlab_ci_runner.helper
 				var authToken = client.Post (new RegisterRunner
 				{
 					token = Uri.EscapeDataString (sToken),
-					public_key = Uri.EscapeDataString (sPubKey)
+					public_key = Uri.EscapeDataString (sPubKey),
+					tag_list = sTaglist,
+					description = Uri.EscapeDataString (sDescription)
 				});
 
 				if (!authToken.token.IsNullOrEmpty ())

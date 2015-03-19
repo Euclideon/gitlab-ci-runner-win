@@ -196,9 +196,6 @@ namespace gitlab_ci_runner.runner
                 p.StartInfo.EnvironmentVariables["CI_BUILD_REF_NAME"] = buildInfo.ref_name;
                 p.StartInfo.EnvironmentVariables["CI_BUILD_ID"] = buildInfo.id.ToString();
 
-				if (Registry.HKCR_PathExists(@"VisualStudio.DTE.8.0"))
-					p.StartInfo.EnvironmentVariables["MSBUILD_2005"] = Registry.HKLM_GetString(@"Software\Microsoft\MSBuild\ToolsVersions\4.0", "MSBuildToolsPath") + @"\msbuild.exe /pVisualStudioVersion:8.0 /p:PlatformToolset=v80";
-
 				if (Registry.HKCR_PathExists(@"VisualStudio.DTE.9.0"))
 					p.StartInfo.EnvironmentVariables["MSBUILD_2008"] = Registry.HKLM_GetString(@"Software\Microsoft\MSBuild\ToolsVersions\4.0", "MSBuildToolsPath") + @"\msbuild.exe /pVisualStudioVersion:9.0 /p:PlatformToolset=v90";
 

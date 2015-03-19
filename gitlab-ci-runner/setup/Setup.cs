@@ -90,8 +90,6 @@ namespace gitlab_ci_runner.setup
 			}
 
 			// Append vs versions
-			if (Registry.HKCR_PathExists(@"VisualStudio.DTE.8.0"))
-				sTaglist += ", vs2005";
 			if (Registry.HKCR_PathExists(@"VisualStudio.DTE.9.0"))
 				sTaglist += ", vs2008";
 			if (Registry.HKCR_PathExists(@"VisualStudio.DTE.10.0"))

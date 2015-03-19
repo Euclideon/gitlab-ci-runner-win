@@ -197,16 +197,16 @@ namespace gitlab_ci_runner.runner
                 p.StartInfo.EnvironmentVariables["CI_BUILD_ID"] = buildInfo.id.ToString();
 
 				if (Registry.HKCR_PathExists(@"VisualStudio.DTE.9.0"))
-					p.StartInfo.EnvironmentVariables["MSBUILD_2008"] = Registry.HKLM_GetString(@"Software\Microsoft\MSBuild\ToolsVersions\4.0", "MSBuildToolsPath") + @"\msbuild.exe /pVisualStudioVersion:9.0 /p:PlatformToolset=v90";
+					p.StartInfo.EnvironmentVariables["MSBUILD_2008"] = "\"" + Registry.HKLM_GetString(@"Software\Microsoft\MSBuild\ToolsVersions\4.0", "MSBuildToolsPath") + "\\msbuild.exe\" /pVisualStudioVersion:9.0 /p:PlatformToolset=v90";
 
 				if (Registry.HKCR_PathExists(@"VisualStudio.DTE.10.0"))
-					p.StartInfo.EnvironmentVariables["MSBUILD_2010"] = Registry.HKLM_GetString(@"Software\Microsoft\MSBuild\ToolsVersions\4.0", "MSBuildToolsPath") + @"\msbuild.exe /pVisualStudioVersion:10.0 /p:PlatformToolset=v100";
+					p.StartInfo.EnvironmentVariables["MSBUILD_2010"] = "\"" + Registry.HKLM_GetString(@"Software\Microsoft\MSBuild\ToolsVersions\4.0", "MSBuildToolsPath") + "\\msbuild.exe\" /pVisualStudioVersion:10.0 /p:PlatformToolset=v100";
 
 				if (Registry.HKCR_PathExists(@"VisualStudio.DTE.11.0"))
-					p.StartInfo.EnvironmentVariables["MSBUILD_2012"] = Registry.HKLM_GetString(@"Software\Microsoft\MSBuild\ToolsVersions\4.0", "MSBuildToolsPath") + @"\msbuild.exe /pVisualStudioVersion:11.0 /p:PlatformToolset=v110";
+					p.StartInfo.EnvironmentVariables["MSBUILD_2012"] = "\"" + Registry.HKLM_GetString(@"Software\Microsoft\MSBuild\ToolsVersions\4.0", "MSBuildToolsPath") + "\\msbuild.exe\" /pVisualStudioVersion:11.0 /p:PlatformToolset=v110";
 
 				if (Registry.HKCR_PathExists(@"VisualStudio.DTE.12.0"))
-					p.StartInfo.EnvironmentVariables["MSBUILD_2013"] = Registry.HKLM_GetString(@"Software\Microsoft\MSBuild\ToolsVersions\12.0","MSBuildToolsPath") + @"\msbuild.exe";
+					p.StartInfo.EnvironmentVariables["MSBUILD_2013"] = "\"" + Registry.HKLM_GetString(@"Software\Microsoft\MSBuild\ToolsVersions\12.0", "MSBuildToolsPath") + "\\msbuild.exe\"";
 
                 // Redirect Standard Output and Standard Error
                 p.StartInfo.RedirectStandardOutput = true;
